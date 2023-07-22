@@ -12,10 +12,10 @@ info: |
 drawings:
   persist: false
 transition: slide-left
-title: Smart BDD - less code, higher quality tests and better documentation!
+title: Smart BDD - Less code, higher quality tests and better documentation!
 ---
 
-## Smart BDD - less code, higher quality tests and better documentation!
+## Smart BDD - Less code, higher quality tests and better documentation!
 
 An introduction to Smart BDD
 
@@ -34,6 +34,7 @@ Software developer since 2000
 
 Author of Smart BDD 
  - https://github.com/bit-smart-io/smart-bdd
+ - mejrbayliss@gmail.com 
 
 ---
 
@@ -222,7 +223,7 @@ public class ShoppingTest {
   }
 
   public void myChangeShouldBe(int change) {
-    assertThat(-calculator.value().intValue()).isEqualTo(change);
+      assertThat(-shoppingService.calculatorValue().intValue()).isEqualTo(change);
   }
 
   public void givenTheFollowingGroceries(Grocery... groceries) {
@@ -305,7 +306,7 @@ We have 3 options:
 
 1. Mutate `i_pay` method to handle a currency. If we had 10's or 100's occurrences of `When I pay ..` this would be
    risky and time-consuming. If we add "Visa" payment method, we are starting to add complexity to an existing method.
-2. Create a new method doesn't start with `I pay`. It could be `With currency I pay 25 "Dollars"`. Not idea as this
+2. Create a new method doesn't start with `I pay`. It could be `With currency I pay 25 "Dollars"`. Not ideal as this
    isn't really what wanted. It looses discoverability. How would we add "Visa" payment method?
 3. Use multiple steps `I pay` and `with currency`. This is the most maintainable solution. For discoverability, you'd
    need a consistent naming convention. With a large codebase, good luck with discoverability, as they are loosely
@@ -318,7 +319,7 @@ We have 3 options:
 @ExtendWith(SmartReport.class)
 public class ShoppingTest { 
   private final ShoppingService shoppingService = new ShoppingService();
-  private PayBuilder payBuilder = new PayBuilder();
+  private final PayBuilder payBuilder = new PayBuilder();
     
   @Test
   void giveCorrectChangeWhenCurrencyIsDollars() {
@@ -333,7 +334,7 @@ public class ShoppingTest {
   
   public void myChangeShouldBe(int change) {
     pay();
-    assertEquals(-shoppingService.calculatorValue().intValue(), change);
+      assertThat(-shoppingService.calculatorValue().intValue()).isEqualTo(change);
   }
   
   private void pay() {
@@ -351,14 +352,23 @@ public class ShoppingTest {
 
 Let's count the number of lines:
 
-| Cucumber         | Lines     | Smart BDD        | Lines |
-|:-----------------|:----------|:-----------------|:------|  
-| ShoppingSteps    | 123       | ShoppingTest     | 114   |
-| ParameterTypes   | 21        |                  |       |
-| runCucumberTest  | 16        |                  |       |
-| shopping.feature | 20        |                  |       |
-| **Total**        | 180 lines | **Total**        | 114   |
+| Cucumber         | Lines | Smart BDD        | Lines |
+|:-----------------|:------|:-----------------|:------|  
+| ShoppingSteps    | 123   | ShoppingTest     | 114   |
+| ParameterTypes   | 21    |                  |       |
+| runCucumberTest  | 16    |                  |       |
+| shopping.feature | 20    |                  |       |
+| **Total**        | 180   | **Total**        | 114   |
 
+----
+
+### The difference in approach leads to Smart BDD
+
+* To having less code and higher quality code
+* Therefore, less complexity
+* Therefore, lowering the cost of maintaining and adding testing
+* Therefore, increasing productivity
+* Oh, and you get sequence diagrams plus many new features are in the pipeline
 ----
 
 ### What's next for Smart BDD
@@ -375,6 +385,6 @@ Looking for some adoption and would love to hear if anybody is interested in usi
 
 ----
 
-That's my very quick demo
+That's my very quick demo, questions please
 
 ----
