@@ -411,7 +411,8 @@ Looking for some adoption and would love to hear if anybody is interested in usi
   * What if the acceptance criteria is worded in such a way that adds complexity and or forces refactoring to your tests?
     * Example "I pay with 25 dollars using Visa on a Friday"
     * Of course, you re-word the acceptance criteria 
-  * Or the business is a sentient being that has know of past, present and future of your test code base?
+  * Or the business is a sentient being that has knowledge of past, present and future of your test code base?
+    * And therefore you can just copy and paste the requirements in to the feature file
 
 It's better to have consistent tests, builders will help you achieve this.
 
