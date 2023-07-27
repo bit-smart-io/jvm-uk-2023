@@ -32,23 +32,25 @@ James Bayliss
 
 Software developer since 2000
 
-Author of Smart BDD 
- - https://github.com/bit-smart-io/smart-bdd
- - mejrbayliss@gmail.com 
+Author of Smart BDD
+
+- https://github.com/bit-smart-io/smart-bdd
+- mejrbayliss@gmail.com
 
 ---
 
 ### What's the landscape and what problem is Smart BDD solving?
 
-* Functional, integration, end-to-end etc... test codebases can become too complicated
-  * Painful to maintain
-  * This can lead to re-writes of re-writes etc...
+* Functional, integration, end-to-end etc... codebases can become too complicated especially when using feature files
+    * Painful to maintain
+    * This can lead to re-writes of re-writes etc...
 * Frameworks themselves get in the way - increase code complexity and reduce productivity and coverage
 * They lack diagrams, a diagram is very useful for communication
 
 ---
 
 With Smart BDD you write the code first using best practices and this generates:
+
 * Interactive feature files that serve as documentation
 * Diagrams to better document the product
 
@@ -56,7 +58,7 @@ The barrier to entry is super low, you start with one annotation or add a file t
 generating documentation.
 
 ---
- 
+
 ### Smart BDD interactive HTML page
 
 ![Local Image](/images/get-book.jpg)
@@ -65,6 +67,7 @@ generating documentation.
 ### Smart BDD code that generated the interactive HTML page
 
 ```java
+
 @ExtendWith(SmartReport.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BookControllerIT {
@@ -91,36 +94,38 @@ public class BookControllerIT {
 ----
 
 ### Correct abstraction for the problem
+
 * Why? Because below does it all and not good for code re-use!
 * Tests should have good quality
 * Measure of quality could be considered to be the ability to change
 
 ```java
 @Test
-public void getBookBy13DigitIsbn_returnsTheCorrectBook() {
-    final IsbnBook book = new IsbnBook(VALID_13_DIGIT_ISBN_FOR_BOOK_1, "book 1 title", singletonList("book 1 author"));
-    
-    stubFor(get(urlEqualTo("/isbn-db/"+VALID_13_DIGIT_ISBN_FOR_BOOK_1))
+public void getBookBy13DigitIsbn_returnsTheCorrectBook(){
+final IsbnBook book=new IsbnBook(VALID_13_DIGIT_ISBN_FOR_BOOK_1,"book 1 title",singletonList("book 1 author"));
+
+        stubFor(get(urlEqualTo("/isbn-db/"+VALID_13_DIGIT_ISBN_FOR_BOOK_1))
         .withPort(PORT)
         .willReturn(aResponse()
         .withHeader("Content-Type","application/json")
         .withBody(bookAsString(book))));
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(singletonList(MediaType.APPLICATION_JSON));
-    ResponseEntity<String> response=template.getForEntity("/book/"+VALID_13_DIGIT_ISBN_FOR_BOOK_1, String.class, headers);
+        HttpHeaders headers=new HttpHeaders();
+        headers.setAccept(singletonList(MediaType.APPLICATION_JSON));
+        ResponseEntity<String> response=template.getForEntity("/book/"+VALID_13_DIGIT_ISBN_FOR_BOOK_1,String.class,headers);
 
-    assertThat(bookFromJson(response.getBody())).isEqualTo(book);
-}
+        assertThat(bookFromJson(response.getBody())).isEqualTo(book);
+        }
 ```
 
 ----
 
 ### Let's take an example
-* Take the latest cucumber code Cucumber - https://github.com/cucumber/cucumber-jvm/tree/main/examples/calculator-java-junit5
-* Create a repo with one example calculator-java-junit5 copy and pasted it in to a new project -
-https://github.com/bit-smart-io/smart-bdd-examples
 
+* Take the latest cucumber code
+  Cucumber - https://github.com/cucumber/cucumber-jvm/tree/main/examples/calculator-java-junit5
+* Create a repo with one example calculator-java-junit5 copy and pasted it in to a new project -
+  https://github.com/bit-smart-io/smart-bdd-examples
 
 ---
 
@@ -203,42 +208,45 @@ public class ParameterTypes {
 ```
 
 ----
+
 ### Smart BDD example - Page 1 of 1
 
 ```java
+
 @ExtendWith(SmartReport.class)
-public class ShoppingTest { 
-  private final RpnCalculator calculator = new RpnCalculator();
+public class ShoppingTest {
+    private final RpnCalculator calculator = new RpnCalculator();
 
-  @Test
-  void giveCorrectChange() {
-    givenTheFollowingGroceries(item("milk", 9), item("bread", 7), item("soap", 5));
-    whenIPay(25);
-    myChangeShouldBe(4);
-  }
-
-  public void whenIPay(int amount) {
-    calculator.push(amount);
-    calculator.push("-");
-  }
-
-  public void myChangeShouldBe(int change) {
-      assertThat(-shoppingService.calculatorValue().intValue()).isEqualTo(change);
-  }
-
-  public void givenTheFollowingGroceries(Grocery... groceries) {
-    for (Grocery grocery : groceries) {
-        calculator.push(grocery.getPrice());
-        calculator.push("+");
+    @Test
+    void giveCorrectChange() {
+        givenTheFollowingGroceries(item("milk", 9), item("bread", 7), item("soap", 5));
+        whenIPay(25);
+        myChangeShouldBe(4);
     }
-  }
-  // omitted Grocery class 
+
+    public void whenIPay(int amount) {
+        calculator.push(amount);
+        calculator.push("-");
+    }
+
+    public void myChangeShouldBe(int change) {
+        assertThat(-shoppingService.calculatorValue().intValue()).isEqualTo(change);
+    }
+
+    public void givenTheFollowingGroceries(Grocery... groceries) {
+        for (Grocery grocery : groceries) {
+            calculator.push(grocery.getPrice());
+            calculator.push("+");
+        }
+    }
+    // omitted Grocery class 
 }
 ```
 
 ----
 
 ### Cheated a little
+
 The font size is epically big, so I put items on the same line
 
 ```
@@ -252,6 +260,7 @@ My change should be 4
 ```
 
 Future dev would allow item method to have `@HideMethodName` and that would yield better results
+
 ```
 Scenario: Give correct change (PASSED)
 Given the following groceries
@@ -261,6 +270,7 @@ Given the following groceries
 When I pay 25
 My change should be 4
 ```
+
 ----
 
 ### I'll try to demonstrate the complexity of Cucumber
@@ -280,12 +290,13 @@ It is reasonable to think that we can add this method
 ```java
 @When("I pay {int} {string}")
 public void i_pay(int amount,String currency){
-  calc.push(amount*exchangeRate(currency));
-  calc.push("-");
-}
+        calc.push(amount*exchangeRate(currency));
+        calc.push("-");
+        }
 ```
 
 ----
+
 #### Big cup of nope!
 
 This is the output
@@ -297,11 +308,15 @@ io.cucumber.core.runner.AmbiguousStepDefinitionsException: "I pay 25 "Dollars"" 
 ```
 
 * Here is where the tail starts to wag the dog, you embark of investing time and more code to work around the framework
-* We should always strive for simplicity, additional code and in a boarder sense additional features will always make code
-harder to maintain
+* We should always strive for simplicity, additional code and in a boarder sense additional features will always make
+  code
+  harder to maintain
+* We should not let the UI domain bleed in the code, we should respect boundaries
 
 ----
+
 #### More pain
+
 We have 3 options:
 
 1. Mutate `i_pay` method to handle a currency. If we had 10's or 100's occurrences of `When I pay ..` this would be
@@ -311,38 +326,40 @@ We have 3 options:
 3. Use multiple steps `I pay` and `with currency`. This is the most maintainable solution. For discoverability, you'd
    need a consistent naming convention. With a large codebase, good luck with discoverability, as they are loosely
    coupled in the feature file, but coupled in code.
+
 ----
 
 ### Simple solution in Smart BDD
 
 ```java
-@ExtendWith(SmartReport.class)
-public class ShoppingTest { 
-  private final ShoppingService shoppingService = new ShoppingService();
-  private final PayBuilder payBuilder = new PayBuilder();
-    
-  @Test
-  void giveCorrectChangeWhenCurrencyIsDollars() {
-    givenTheFollowingGroceries(item("milk", 9), item("bread", 7), item("soap", 5));
-    whenIPay(25).withCurrency("Dollars");
-    myChangeShouldBe(29);
-  }
 
-  public PayBuilder whenIPay(int amount) {
-    return payBuilder.withAmount(amount);
-  }
-  
-  public void myChangeShouldBe(int change) {
-    pay();
-      assertThat(-shoppingService.calculatorValue().intValue()).isEqualTo(change);
-  }
-  
-  private void pay() {
-    final Pay pay = payBuilder.build();
-    shoppingService.calculatorPushWithCurrency(pay.getAmount(), pay.getCurrency());
-    shoppingService.calculatorPush("-");
-  }
-  // builders and classes omitted
+@ExtendWith(SmartReport.class)
+public class ShoppingTest {
+    private final ShoppingService shoppingService = new ShoppingService();
+    private final PayBuilder payBuilder = new PayBuilder();
+
+    @Test
+    void giveCorrectChangeWhenCurrencyIsDollars() {
+        givenTheFollowingGroceries(item("milk", 9), item("bread", 7), item("soap", 5));
+        whenIPay(25).withCurrency("Dollars");
+        myChangeShouldBe(29);
+    }
+
+    public PayBuilder whenIPay(int amount) {
+        return payBuilder.withAmount(amount);
+    }
+
+    public void myChangeShouldBe(int change) {
+        pay();
+        assertThat(-shoppingService.calculatorValue().intValue()).isEqualTo(change);
+    }
+
+    private void pay() {
+        final Pay pay = payBuilder.build();
+        shoppingService.calculatorPushWithCurrency(pay.getAmount(), pay.getCurrency());
+        shoppingService.calculatorPush("-");
+    }
+    // builders and classes omitted
 }
 ```
 
@@ -352,13 +369,13 @@ public class ShoppingTest {
 
 Let's count the number of lines:
 
-| Cucumber         | Lines | Smart BDD        | Lines |
-|:-----------------|:------|:-----------------|:------|  
-| ShoppingSteps    | 123   | ShoppingTest     | 114   |
-| ParameterTypes   | 21    |                  |       |
-| runCucumberTest  | 16    |                  |       |
-| shopping.feature | 20    |                  |       |
-| **Total**        | 180   | **Total**        | 114   |
+| Cucumber         | Lines | Smart BDD    | Lines |
+|:-----------------|:------|:-------------|:------|  
+| ShoppingSteps    | 123   | ShoppingTest | 114   |
+| ParameterTypes   | 21    |              |       |
+| runCucumberTest  | 16    |              |       |
+| shopping.feature | 20    |              |       |
+| **Total**        | 180   | **Total**    | 114   |
 
 ----
 
@@ -369,19 +386,34 @@ Let's count the number of lines:
 * Therefore, lowering the cost of maintaining and adding testing
 * Therefore, increasing productivity
 * Oh, and you get sequence diagrams plus many new features are in the pipeline
+
 ----
 
 ### What's next for Smart BDD
+
 * Better diagrams
 * Ability to generate and store alongside tests
-  * Markdown
-  * Request/response data
+    * Markdown
+    * Request/response data
 * Interactive HTML
-  * Rerun tests
-  * Change values 
+    * Rerun tests
+    * Change values
 * Store and measure performance of tests
 
 Looking for some adoption and would love to hear if anybody is interested in using.
+
+----
+
+### One last thing for clarification
+
+* The business can still write user stories and or acceptance criteria first!
+* The notation that user stories / acceptance criteria is lifted and shifted to a feature a file is simply not true:
+  * What if the acceptance criteria is worded in such a way that adds complexity and or forces refactoring to your tests?
+    * Example "I pay with 25 dollars using Visa on a Friday"
+    * Of course, you re-word the acceptance criteria 
+  * Or the business is a sentient being that has know of past, present and future of your test code base?
+
+It's better to have consistent tests, builders will help you achieve this.
 
 ----
 
